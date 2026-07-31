@@ -1,5 +1,6 @@
 import { UserStatus } from "../../../generated/client/enums";
 import { auth } from "../../lib/auth";
+import { prisma } from "../../lib/prisma";
 
 interface IRegisterPatientPayload {
     name: string,
@@ -25,11 +26,32 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
         throw new Error("Failed to register patient")
     }
 
-    // const patient = await prisma.$transaction(async (tx) => {
+    try {
+        const patient = await prisma.$transaction(async (tx) => {
 
-    // })
+        const patientTx = await tx.patient.create({
+            data: {
+                userId: data.user.id,
+                name: payload.name,
+                email: payload.email
+            }
+        })
+        return patientTx
+    })
 
-    return data
+    return {
+        ...data,
+        patient
+    }
+    } catch (error) {
+        console.log("transaction error", error);
+        await prisma.user.delete({
+            where:{
+                id: data.user.id
+            }
+        });
+        throw Error
+    }
 }
 
 interface ILoginUserPayload {
@@ -37,22 +59,24 @@ interface ILoginUserPayload {
     password: string,
 }
 
-const loginUser = async(payload: ILoginUserPayload) =>{
-    const { email, password} = payload;
+const loginUser = async (payload: ILoginUserPayload) => {
+    const { email, password } = payload;
     const data = await auth.api.signInEmail({
-        body:{
+        body: {
             email,
             password
         }
     })
 
-    if(data.user.status === UserStatus.BLOCKED){
+    if (data.user.status === UserStatus.BLOCKED) {
         throw new Error("user is blocked")
     }
 
-    if(data.user.isDeleted || data.user.status === UserStatus.DELETED){
+    if (data.user.isDeleted || data.user.status === UserStatus.DELETED) {
         throw new Error("user is deleted")
     }
+
+
 
     return data;
 }
