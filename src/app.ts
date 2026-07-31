@@ -15,22 +15,15 @@ app.use(express.json());
 app.use("/api/v1/", indexRoutes);
 
 // Basic route
-app.get('/', async (req: Request, res: Response) => {
-
-    const specialty = await prisma.specialty.create({
-        data: {
-            title: 'cardiology',
-        }
-    })
-
-    res.status(201).json({
+app.get('/', (req: Request, res: Response) => {
+    res.status(200).json({
         success: true,
         message: 'api is working',
-        data: specialty
     })
 });
 
-app.use(globalErrorHandler);
 app.use(notFound);
+app.use(globalErrorHandler);
+
 
 export default app;

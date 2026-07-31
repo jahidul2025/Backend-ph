@@ -72,7 +72,7 @@ const loginUser = async (payload: ILoginUserPayload) => {
         throw new Error("user is blocked")
     }
 
-    if (data.user.isDeleted || data.user.status === UserStatus.DELETED) {
+    if (data.user.status === UserStatus.DELETED) {
         throw new Error("user is deleted")
     }
 
