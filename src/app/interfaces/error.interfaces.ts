@@ -5,6 +5,7 @@ export interface TErrorSource {
 
 export interface TErrorResponse {
     statusCode?: number,
+    stack?: string,
     success: boolean,
     message: string,
     errorSources: TErrorSource[],

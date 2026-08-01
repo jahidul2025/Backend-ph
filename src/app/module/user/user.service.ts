@@ -3,6 +3,8 @@ import { prisma } from "../../lib/prisma";
 import { auth } from "../../lib/auth";
 import { specialty } from "../../../generated/client/client";
 import { ICreateDoctorPayload } from "./user.interface";
+import AppError from "../../errorHelpers/AppError";
+import status from "http-status";
 
 const createDoctor = async (payload: ICreateDoctorPayload) => {
 
@@ -15,7 +17,7 @@ const createDoctor = async (payload: ICreateDoctorPayload) => {
             }
         })
         if (!specialty) {
-            throw new Error(`Specialty with id ${specialtyId} not found`);
+            throw new AppError(`Specialty with id ${specialtyId} not found`, status.NOT_FOUND)
         }
         specialties.push(specialty);
     }
@@ -28,7 +30,6 @@ const createDoctor = async (payload: ICreateDoctorPayload) => {
     })
 
     if (userExists) {
-        // throw new Error("User with this email already exists");
         throw new Error("User with this email already exists");
     }
 
