@@ -1,8 +1,24 @@
 import { Router } from "express";
 import { DoctorController } from "./doctor.controller";
+import { Role } from "../../../generated/client/enums";
+import { checkAuth } from "../../middlewere/checkAuth";
+import { validateRequest } from "../../middlewere/validateRequest";
+import { updateDoctorZodSchema } from "./doctor.validetion";
+
 
 const router = Router();
 
-router.get("/" , DoctorController.getAllDoctors)
+router.get("/",
+    // checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    DoctorController.getAllDoctors);
+router.get("/:id",
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    DoctorController.getDoctorById);
+router.patch("/:id",
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    validateRequest(updateDoctorZodSchema), DoctorController.updateDoctor);
+router.delete("/:id",
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    DoctorController.deleteDoctor);
 
-export const DoctorRoutes = router
+export const DoctorRoutes = router;

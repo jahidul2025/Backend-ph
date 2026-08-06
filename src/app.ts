@@ -3,6 +3,7 @@ import { prisma } from "./app/lib/prisma";
 import { indexRoutes } from "./app/routes";
 import { globalErrorHandler } from "./app/middlewere/globalErrorHandler";
 import { notFound } from "./app/middlewere/notFound";
+import cookieParser from "cookie-parser";
 
 
 const app: Application = express();
@@ -12,7 +13,10 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware to parse JSON bodies
 app.use(express.json());
 
+app.use(cookieParser())
+
 app.use("/api/v1/", indexRoutes);
+
 
 // Basic route
 app.get('/', (req: Request, res: Response) => {
