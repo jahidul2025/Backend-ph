@@ -3,7 +3,6 @@ import { jwtUtils } from "./jwt";
 import { envVars } from "../../config/env";
 import { Response } from "express";
 import { cookieUtils } from "./cookie";
-import ms, { StringValue } from "ms";
 
 
 // creating access token
@@ -23,25 +22,24 @@ const getRefreshToken = (payload: JwtPayload) => {
 }
 
 const setAccessTokenCookie = (res: Response, token: string) => {
-    const maxAge = ms(envVars.ACCESS_TOKEN_EXPIRES_IN as StringValue)
     cookieUtils.setCookie(res, "accessToken", token, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
         path: "/",
         // 1 day
-        maxAge: 60 * 60 * 60 * 24,
+        maxAge: 60 * 60 * 24 * 1000,
     })
 }
 
 const setRefreshTokenCookie = (res: Response, token: string) => {
-    cookieUtils.setCookie(res, "refresh_token", token, {
+    cookieUtils.setCookie(res, "refreshToken", token, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
         path: "/",
         // 7 day
-        maxAge: 60 * 60 * 60 * 24 * 7,
+        maxAge: 60 * 60 * 24 * 1000 * 7,
     })
 }
 
@@ -52,7 +50,7 @@ const setBetterAuthSessionCookie = (res: Response, token: string) => {
         sameSite: "none",
         path: "/",
         // 1 day
-        maxAge: 60 * 60 * 60 * 24,
+        maxAge: 60 * 60 * 24 * 1000,
     })
 }
 
