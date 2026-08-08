@@ -255,15 +255,15 @@ const changePassword = async (payload: IChangePasswordPayload, sessionToken: str
         })
     })
 
-    if(session.user.needPasswordChange) {
+    if (session.user.needPasswordChange) {
         await prisma.user.update({
-        where: {
-            id: session.user.id
-        },
-        data: {
-            needPasswordChange: false
-        }
-    })
+            where: {
+                id: session.user.id
+            },
+            data: {
+                needPasswordChange: false
+            }
+        })
     }
 
     const accessToken = tokenUtils.getAccessToken({
@@ -367,16 +367,29 @@ const resetPassword = async (email: string, otp: string, newPassword: string) =>
         body: {
             email,
             otp,
-            password : newPassword
+            password: newPassword
         }
     })
+
+    if (isUserExists.needPasswordChange) {
+        await prisma.user.update({
+            where: {
+                id: isUserExists.id
+            },
+            data: {
+                needPasswordChange: false
+            }
+        })
+    }
 
     await prisma.session.deleteMany({
         where: {
             userId: isUserExists.id
-        }   
+        }
     })
 }
+
+const googleLoginSuccess = async () => { }
 
 
 export const AuthService = {
@@ -388,5 +401,6 @@ export const AuthService = {
     logoutUser,
     verifyEmail,
     forgetPassword,
-    resetPassword
+    resetPassword,
+    googleLoginSuccess
 }
