@@ -17,12 +17,13 @@ export const globalErrorHandler = async (err: any, req: Request, res: Response, 
         console.log("error from global error handler", err)
     }
 
-    if (req.file) {
-        await deleteFileFromCloudinary(req.file.path)
+    // Only delete from Cloudinary if a URL path exists (multer memoryStorage does not set file.path)
+    if (req.file?.path) {
+        await deleteFileFromCloudinary(req.file.path);
     }
 
     if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-        const imageUrls = req.files.map((file) => file.path);
+        const imageUrls = req.files.map((file) => file.path).filter(Boolean);
         await Promise.all(imageUrls.map(url => deleteFileFromCloudinary(url)));
     }
 

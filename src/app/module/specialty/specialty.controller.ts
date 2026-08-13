@@ -3,18 +3,26 @@ import { Request, Response } from "express";
 import { specialtyService } from "./specialty.service";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
-
-
+import { uploadFileToCloudinary } from "../../../config/cloudinary.config";
 
 
 
 const createSpecialty = catchAsync(
     async (req: Request, res: Response) => {
         console.log(req.body, "body");
+
+        let iconUrl: string | undefined;
+
+        if (req.file?.buffer) {
+            const uploadResult = await uploadFileToCloudinary(req.file.buffer, req.file.originalname);
+            iconUrl = uploadResult.secure_url;
+        }
+
         const payload = {
             ...req.body,
-            icon: req.file?.path
+            icon: iconUrl
         };
+
         const result = await specialtyService.createSpecialty(payload);
         sendResponse(res, {
             httpStatusCode: 201,

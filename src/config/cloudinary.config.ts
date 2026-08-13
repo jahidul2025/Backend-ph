@@ -44,11 +44,14 @@ export const uploadFileToCloudinary = async (
             {
                 resource_type: "auto",
                 public_id: `ph-healthcare/${folder}/${uniqueName}`,
-                folder: `ph-healthcare/${folder}`,
             },
             (error, result) => {
                 if (error) {
-                    return reject(new AppError("Failed to upload file to Cloudinary", status.INTERNAL_SERVER_ERROR));
+                    console.error("[Cloudinary Upload Error]", JSON.stringify(error, null, 2));
+                    return reject(new AppError(
+                        `Cloudinary upload failed: ${error.message} (http_code: ${error.http_code})`,
+                        status.INTERNAL_SERVER_ERROR
+                    ));
                 }
                 resolve(result as UploadApiResponse);
             }

@@ -11,7 +11,7 @@ export const validateRequest = (ZodSchema: z.ZodObject) => {
         const parsedResult = ZodSchema.safeParse(req.body);
 
         if (!parsedResult.success) {
-            next(parsedResult.error)
+            return next(parsedResult.error)
         }
 
         // sanitizing the data
