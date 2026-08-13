@@ -10,5 +10,4 @@ router.use("/specialties", specialtyRoutes);
 router.use("/users", UserRoutes);
 router.use("/doctors", DoctorRoutes)
 
-
 export const indexRoutes = router;
