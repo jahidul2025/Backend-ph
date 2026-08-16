@@ -2,8 +2,8 @@ import { Router } from "express";
 import { checkAuth } from "../../middlewere/checkAuth";
 import { Role } from "../../../generated/client/enums";
 import { validateRequest } from "../../middlewere/validateRequest";
-import { ScheduleController } from "./shedule.controller";
-import { ScheduleValidation } from "./shedule.validation";
+import { ScheduleController } from "./schedule.controller";
+import { ScheduleValidation } from "./schedule.validation";
 
 const router = Router();
 
