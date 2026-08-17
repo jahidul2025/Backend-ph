@@ -1,9 +1,9 @@
 import { Router } from "express";
 
 import { AdminController } from "./admin.controller";
-import { checkAuth } from "../../middlewere/checkAuth";
+import { checkAuth } from "../../middleware/checkAuth";
 import { Role } from "../../../generated/client/enums";
-import { validateRequest } from "../../middlewere/validateRequest";
+import { validateRequest } from "../../middleware/validateRequest";
 import { updateAdminZodSchema } from "./admin.validation";
 
 

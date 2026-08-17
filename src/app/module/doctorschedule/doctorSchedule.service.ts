@@ -1,10 +1,8 @@
-
-
-import { DoctorSchedules, Prisma } from "../../generated/client/client";
-import { IQueryParams } from "../interfaces/query.interfaces";
-import { IRequestUser } from "../interfaces/requestUser.interfaces";
-import { prisma } from "../lib/prisma";
-import { QueryBuilder } from "../utils/QueryBuilder";
+import { DoctorSchedules, Prisma } from "../../../generated/client/client";
+import { IQueryParams } from "../../interfaces/query.interfaces";
+import { IRequestUser } from "../../interfaces/requestUser.interfaces";
+import { prisma } from "../../lib/prisma";
+import { QueryBuilder } from "../../utils/QueryBuilder";
 import { doctorScheduleFilterableFields, doctorScheduleIncludeConfig, doctorScheduleSearchableFields } from "./doctorschedule.constant";
 import { ICreateDoctorSchedulePayload, IUpdateDoctorSchedulePayload } from "./doctorSchedule.interface";
 

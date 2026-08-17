@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { DoctorController } from "./doctor.controller";
 import { Role } from "../../../generated/client/enums";
-import { checkAuth } from "../../middlewere/checkAuth";
-import { validateRequest } from "../../middlewere/validateRequest";
+import { checkAuth } from "../../middleware/checkAuth";
+import { validateRequest } from "../../middleware/validateRequest";
 import { updateDoctorZodSchema } from "./doctor.validetion";
 
 

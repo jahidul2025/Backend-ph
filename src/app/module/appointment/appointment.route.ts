@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AppointmentController } from "./appointment.controller";
-import { checkAuth } from "../../middlewere/checkAuth";
+import { checkAuth } from "../../middleware/checkAuth";
 import { Role } from "../../../generated/client/enums";
 
 const router = Router();

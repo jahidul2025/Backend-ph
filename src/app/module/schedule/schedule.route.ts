@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { checkAuth } from "../../middlewere/checkAuth";
+import { checkAuth } from "../../middleware/checkAuth";
 import { Role } from "../../../generated/client/enums";
-import { validateRequest } from "../../middlewere/validateRequest";
+import { validateRequest } from "../../middleware/validateRequest";
 import { ScheduleController } from "./schedule.controller";
 import { ScheduleValidation } from "./schedule.validation";
 

@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { multerUpload } from "../../../config/multer.config";
 import { specialtyValidation } from "./specialty.validation";
-import { validateRequest } from "../../middlewere/validateRequest";
+import { validateRequest } from "../../middleware/validateRequest";
 import { specialtyController } from "./specialty.controller";
 import { Role } from "../../../generated/client/enums";
-import { checkAuth } from "../../middlewere/checkAuth";
+import { checkAuth } from "../../middleware/checkAuth";
 
 const router = Router();
 

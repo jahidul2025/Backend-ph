@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import { indexRoutes } from "./app/routes";
-import { globalErrorHandler } from "./app/middlewere/globalErrorHandler";
-import { notFound } from "./app/middlewere/notFound";
+import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
+import { notFound } from "./app/middleware/notFound";
 import cookieParser from "cookie-parser";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./app/lib/auth";
@@ -9,6 +9,8 @@ import path from "path";
 import cors from "cors";
 import { envVars } from "./config/env";
 import qs from "qs"
+import cron from "node-cron";
+import { AppointmentService } from "./app/module/appointment/appointment.service";
 
 
 const app: Application = express();
@@ -32,6 +34,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
+
+cron.schedule("*/25 * * * *", async () => {
+    try {
+        console.log("Running cron job to cancel unpaid appointments...");
+        await AppointmentService.cancelUnpaidAppointments();
+    } catch (error: any) {
+        console.error("Error occurred while canceling unpaid appointments:", error.message);
+    }
+})
 
 app.use("/api/v1/", indexRoutes);
 
