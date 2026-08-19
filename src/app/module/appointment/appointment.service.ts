@@ -1,12 +1,10 @@
 import status from "http-status";
-// import { uuidv7 } from "zod/mini";
+import { v7 as uuidv7 } from 'uuid';
 import AppError from "../../errorHelpers/AppError";
 import { prisma } from "../../lib/prisma";
 import { IBookAppointmentPayload } from "./appointment.interface";
 import { IRequestUser } from "../../interfaces/requestUser.interfaces";
 import { AppointmentStatus, PaymentStatus, Role } from "../../../generated/client/enums";
-import { envVars } from "../../../config/env";
-import { uuidv7 } from "zod";
 
 // Pay Now Book Appointment
 const bookAppointment = async (payload: IBookAppointmentPayload, user: IRequestUser) => {
