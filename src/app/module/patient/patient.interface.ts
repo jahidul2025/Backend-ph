@@ -1,10 +1,10 @@
 import { PatientHealthData, MedicalReport } from './../../../generated/client/browser';
 import { BloodGroup, Gender } from './../../../generated/client/enums';
 export interface IUpdatePatientInfoPayload {
-    name: string
-    profile: string
-    phone: string
-    address: string
+    name?: string
+    profilePhoto?: string
+    phone?: string
+    address?: string
 }
 
 export interface IUpdatePatientHealthDataPayload {
@@ -16,25 +16,25 @@ export interface IUpdatePatientHealthDataPayload {
     height: string;
     weight: string;
     smokingStatus: boolean;
-    dietaryPreferences: string;
+    dietaryPreferences?: string;
     pregnancyStatus: boolean;
-    mentalHealthHistory: string;
-    immunizationStatus: string;
+    mentalHealthHistory?: string;
+    immunizationStatus?: string;
     hasPastSurgeries: boolean;
     recentAnxiety: boolean;
     recentDepression: boolean;
-    maritalStatus: string;
+    maritalStatus?: string;
 }
 
 export interface IUpdatePatientMedicalReportPayload {
-    reportName: string;
-    reportLink: string;
-    shouldDelete: boolean;
-    reportId: string;
+    reportName?: string;
+    reportLink?: string;
+    shouldDelete?: boolean;
+    reportId?: string;
 }
 
 export interface IUpdatePatientProfilePayload {
-    patientInfo: IUpdatePatientInfoPayload;
-    patientHealthData: IUpdatePatientHealthDataPayload;
-    medicalReports: IUpdatePatientMedicalReportPayload[];
+    patientInfo?: IUpdatePatientInfoPayload;
+    patientHealthData?: IUpdatePatientHealthDataPayload;
+    medicalReports?: IUpdatePatientMedicalReportPayload[];
 }

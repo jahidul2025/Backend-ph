@@ -27,5 +27,38 @@ const updatePatientProfileZodSchema = z.object({
         recentDepression: z.boolean().optional(),
         maritalStatus: z.string().optional(),
     }).optional(),
-    medicalReports: z.array(z.object({})).optional()
+    medicalReports: z.array(z.object({
+        shouldDeleted: z.boolean().optional(),
+        reportId: z.uuid().optional(),
+        reportName: z.string().optional(),
+        reportLink: z.url().optional()
+    })).optional().refine((reports) => {
+        if (!reports || reports.length === 0) return true;
+
+        for (const report of reports) {
+            // case-1
+            if (report.shouldDeleted === true && report.reportId) {
+                return false
+            }
+            // case-2
+            if (report.reportId && !report.shouldDeleted) {
+                return false
+            }
+            // case-3
+            if (report.reportName && !report.reportLink) {
+                return false
+            }
+            // case-4
+            if (report.reportLink && !report.reportName) {
+                return false
+            }
+            return true
+        }
+    }, {
+        message: "invalid medical reports data. if should deleted is true then reportId must be present and if reportId is present then should deleted must be false and similarly for reportName and reportLink"
+    })
 })
+
+export const PatientValidation = {
+    updatePatientProfileZodSchema
+}
