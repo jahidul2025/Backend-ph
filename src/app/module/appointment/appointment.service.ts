@@ -126,10 +126,8 @@ const getMyAppointments = async (user: IRequestUser) => {
         }
     });
 
-    let appointments = [];
-
     if (patientData) {
-        appointments = await prisma.appointment.findMany({
+        return await prisma.appointment.findMany({
             where: {
                 patientId: patientData.id
             },
@@ -139,7 +137,7 @@ const getMyAppointments = async (user: IRequestUser) => {
             }
         });
     } else if (doctorData) {
-        appointments = await prisma.appointment.findMany({
+        return await prisma.appointment.findMany({
             where: {
                 doctorId: doctorData.id
             },
@@ -151,8 +149,6 @@ const getMyAppointments = async (user: IRequestUser) => {
     } else {
         throw new Error("User not found");
     }
-
-    return appointments;
 
 }
 

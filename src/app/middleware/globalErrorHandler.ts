@@ -6,7 +6,6 @@ import z from "zod";
 import { TErrorResponse, TErrorSource } from "../interfaces/error.interfaces";
 import { handleZodError } from "../errorHelpers/handleZodError";
 import AppError from "../errorHelpers/AppError";
-import { deleteFileFromCloudinary } from "../../config/cloudinary.config";
 import { deleteUploadedFilesFromGlobalErrorHandler } from "../utils/deletedUplodedFilesFromGlobalErrorHandler";
 
 
