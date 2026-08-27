@@ -20,11 +20,11 @@ const getDashboardStatsData = async (user: IRequestUser) => {
             break;
 
         case Role.DOCTOR:
-            statsData = await getDoctorStatsData
+            statsData = await getDoctorStatsData(user)
             break;
 
         case Role.PATIENT:
-            statsData = await getPatientStatsData
+            statsData = await getPatientStatsData(user)
             break;
 
         default:
@@ -49,13 +49,18 @@ const getSuperAdminStatsData = async () => {
     const adminCount = await prisma.admin.count();
     const userCount = await prisma.user.count();
 
+    const pieChartData = await getPieChartsData()
+    const barChartData = await getBarChartData()
+
     return {
         appointmentCount,
         patientCount,
         doctorCount,
         superAdminCount,
         adminCount,
-        userCount
+        userCount,
+        pieChartData,
+        barChartData
     }
 
 
@@ -68,12 +73,17 @@ const getAdminStatsData = async () => {
     const adminCount = await prisma.admin.count();
     const userCount = await prisma.user.count();
 
+    const pieChartData = await getPieChartsData()
+    const barChartData = await getBarChartData()
+
     return {
         appointmentCount,
         doctorCount,
         patientCount,
         adminCount,
-        userCount
+        userCount,
+        pieChartData,
+        barChartData
     }
 
 };
@@ -176,7 +186,42 @@ const getPatientStatsData = async (user: IRequestUser) => {
 };
 
 
+const getPieChartsData = async () => {
+    const appointmentStatusDistribution = await prisma.appointment.groupBy({
+        by: ['status'],
+        _count: {
+            id: true
+        }
+    })
 
+    const formattedAppointmentStatusDistribution = appointmentStatusDistribution.map(({ _count, status }) => ({
+        status,
+        count: _count.id
+    }))
+
+    return formattedAppointmentStatusDistribution;
+}
+
+const getBarChartData = async () => {
+    interface AppointmentCountByMonth {
+        month: Date;
+        count: bigint;
+    }
+
+    const appointmentCountByMonth: AppointmentCountByMonth[] = await prisma.$queryRaw`
+    
+    SELECT 
+        DATE_TRUNC('month', "createdAt") as month, 
+        CAST(COUNT(*) AS INTEGER) as count
+        FROM "appointments"
+        GROUP BY month
+        ORDER BY month ASC;
+   
+    `
+
+    return appointmentCountByMonth
+
+}
 
 
 export const statsService = {
