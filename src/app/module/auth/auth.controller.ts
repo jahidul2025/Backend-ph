@@ -196,19 +196,39 @@ const resetPassword = catchAsync(
     }
 )
 
-const googleLogin = catchAsync((req: Request, res: Response) => {
+const googleLogin = catchAsync(async (req: Request, res: Response) => {
+    const redirectPath = req.query.redirect as string || "/dashboard";
+    const isValidRedirectPath = redirectPath.startsWith("/") && !redirectPath.startsWith("//");
+    const safeRedirectPath = isValidRedirectPath ? redirectPath : "/dashboard";
+    const callbackURL = `${envVars.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodeURIComponent(safeRedirectPath)}`;
 
-    const redirectPath = req.query.redirect || "/dashboard";
+    const result = await auth.api.signInSocial({
+        body: {
+            provider: "google",
+            callbackURL,
+        },
+        headers: req.headers as Record<string, string>,
+        asResponse: true,
+    });
 
-    const encodedRedirectPath = encodeURIComponent(redirectPath as string);
+    const location = result.headers.get("location");
 
-    const callbackURL = `${envVars.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodedRedirectPath}`;
+    if (!location) {
+        throw new AppError(
+            "Google authentication URL could not be generated",
+            status.INTERNAL_SERVER_ERROR
+        );
+    }
 
-    res.render("googleRedirect", {
-        callbackURL: callbackURL,
-        betterAuthUrl: envVars.BETTER_AUTH_URL,
-    })
-})
+    const getSetCookie = (result.headers as Headers & { getSetCookie?: () => string[] }).getSetCookie;
+    const cookies = getSetCookie ? getSetCookie.call(result.headers) : result.headers.get("set-cookie");
+
+    if (cookies) {
+        res.setHeader("Set-Cookie", cookies);
+    }
+
+    return res.redirect(location);
+});
 
 const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
     const redirectPath = req.query.redirect as string || "/dashboard";

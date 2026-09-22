@@ -1,4 +1,5 @@
-import { Prisma } from "../../generated/client/client"
+import { Prisma } from "../../../generated/client/client"
+
 
 export const doctorScheduleSearchableFields = [
     'id',
