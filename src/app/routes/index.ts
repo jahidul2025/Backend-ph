@@ -15,14 +15,13 @@ const router = Router();
 router.use("/auth", AuthRoutes);
 router.use("/specialties", specialtyRoutes);
 router.use("/users", UserRoutes);
-router.use("/patients", PatientRoutes)
+router.use("/patients", PatientRoutes);
 router.use("/doctors", DoctorRoutes);
 router.use("/admins", AdminRoutes);
 router.use("/schedules", scheduleRoutes);
 router.use("/doctor-schedules", DoctorScheduleRoutes);
 router.use("/appointments", AppointmentRoutes);
 router.use("/stats", statsRoutes);
-router.use("/review", ReviewRoutes)
-
+router.use("/review", ReviewRoutes);
 
 export const indexRoutes = router;
